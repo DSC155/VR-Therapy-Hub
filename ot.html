@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Operation Theatre – A‑Frame</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene background="color: #e8f4fb">
+    <!-- Lighting -->
+    <a-entity light="type: ambient; intensity: 0.6; color: #ffffff"></a-entity>
+    <a-entity light="type: point; intensity: 1.4; distance: 20; color: #ffffff" position="0 4 0"></a-entity>
+
+    <!-- Floor (green sterile) -->
+    <a-plane rotation="-90 0 0" width="10" height="10" color="#a9d3c1"></a-plane>
+
+    <!-- Walls (smaller room) -->
+    <a-box position="0 2 -5" depth="0.2" height="4" width="10" color="#f5fbff"></a-box>
+    <a-box position="5 2 0" rotation="0 90 0" depth="0.2" height="4" width="10" color="#f5fbff"></a-box>
+    <a-box position="-5 2 0" rotation="0 90 0" depth="0.2" height="4" width="10" color="#f5fbff"></a-box>
+
+    <!-- Wall stripe -->
+    <a-box position="0 1.2 -4.9" depth="0.05" height="0.4" width="10" color="#7fcfc2"></a-box>
+
+    <!-- Operating Table -->
+    <a-box position="0 1 0" depth="2.2" height="0.25" width="0.8" color="#4682b4"></a-box>
+    <a-box position="0 0.55 0.8" depth="0.6" height="0.1" width="0.8" color="#4682b4"></a-box>
+    <a-box position="0 0.55 -0.8" depth="0.6" height="0.1" width="0.8" color="#4682b4"></a-box>
+    <a-box position="0 0.3 0" depth="1.8" height="0.3" width="0.25" color="#808080"></a-box>
+
+    <!-- Overhead surgical lights -->
+    <a-entity position="0 3 0">
+      <a-circle radius="0.35" color="#d9e6ff" position="-0.8 0.1 0"></a-circle>
+      <a-circle radius="0.35" color="#d9e6ff" position="0.8 0.1 0"></a-circle>
+      <a-circle radius="0.35" color="#d9e6ff" position="0 0.1 -0.8"></a-circle>
+      <a-circle radius="0.35" color="#d9e6ff" position="0 0.1 0.8"></a-circle>
+      <a-entity light="type: spot; intensity: 0.9; angle: 55" position="0 0 -0.1" rotation="-90 0 0"></a-entity>
+    </a-entity>
+
+    <!-- Monitor (screen without text) -->
+    <a-box position="-2 1.5 -0.5" depth="0.1" height="0.7" width="1" color="#1e2a38"></a-box>
+
+    <!-- Small Instrument Stand near bed -->
+    <a-box position="0.9 0.8 0.5" depth="0.8" height="0.6" width="0.6" color="#c1d9f0"></a-box>
+    <a-box position="0.9 1.1 0.5" depth="0.7" height="0.1" width="0.5" color="#9fb8d6"></a-box>
+
+    <!-- Instruments (syringes, knives, scissors simplified shapes) -->
+    <a-cylinder position="0.8 1.2 0.5" radius="0.02" height="0.25" color="#cccccc"></a-cylinder> <!-- syringe -->
+    <a-box position="0.9 1.2 0.45" depth="0.25" height="0.02" width="0.05" color="#999999"></a-box> <!-- scalpel -->
+    <a-box position="1.0 1.2 0.55" depth="0.15" height="0.02" width="0.08" color="#aaaaaa"></a-box> <!-- scissors handle -->
+    <a-cylinder position="1.0 1.2 0.62" radius="0.02" height="0.1" color="#555555"></a-cylinder>
+
+    <!-- Side tables -->
+    <a-box position="-3 1 -2" depth="1" height="0.2" width="2.5" color="#c1d9f0"></a-box>
+    <a-box position="-3 0.5 -2" depth="1" height="0.6" width="2.5" color="#9fb8d6"></a-box>
+
+    <!-- Camera -->
+    <a-entity position="0 1.6 5">
+      <a-entity camera look-controls wasd-controls></a-entity>
+    </a-entity>
+  </a-scene>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<html lang="en" data-color-scheme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Therapy Hub - Professional Mental Health Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-brain nav-logo"></i>
+                <span class="nav-title">VR Therapy Hub</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#assessment" class="nav-link">Assessment</a>
+                <a href="#environments" class="nav-link">Environments</a>
+                <a href="#dashboard" class="nav-link">Dashboard</a>
+                <a href="#resources" class="nav-link">Resources</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-bg">
+            <div class="floating-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+        </div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Advanced VR Therapy Platform</h1>
+                <p class="hero-subtitle">Evidence-based virtual reality exposure therapy for anxiety, phobias, and PTSD treatment</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Patients Treated</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Availability</div>
+                    </div>
+                </div>
+                <button class="btn btn--primary btn--lg start-assessment" onclick="startAssessment()">
+                    <i class="fas fa-play-circle"></i>
+                    Start Clinical Assessment
+                </button>
+            </div>
+            <div class="hero-visual">
+                <div class="vr-headset">
+                    <div class="headset-body">
+                        <div class="headset-lens left-lens"></div>
+                        <div class="headset-lens right-lens"></div>
+                        <div class="headset-logo">
+                            <i class="fas fa-vr-cardboard"></i>
+                        </div>
+                    </div>
+                    <div class="headset-strap"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section id="assessment" class="assessment">
+        <div class="container">
+            <div class="section-header">
+                <h2>Clinical Assessment</h2>
+                <p>Comprehensive evaluation using validated clinical scales</p>
+            </div>
+            
+            <div class="assessment-wizard">
+                <div class="wizard-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Basic Info</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">GAD-7</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Phobias</div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">PCL-5</div>
+                    </div>
+                    <div class="step" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Biometrics</div>
+                    </div>
+                </div>
+
+                <div class="wizard-content">
+                    <!-- Step 1: Basic Info -->
+                    <div class="step-content active" id="step1">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Basic Information</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Age Range</label>
+                                    <select class="form-control" id="ageRange">
+                                        <option>18-25</option>
+                                        <option>26-35</option>
+                                        <option>36-45</option>
+                                        <option>46-55</option>
+                                        <option>55+</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Primary Concern</label>
+                                    <select class="form-control" id="primaryConcern">
+                                        <option>Anxiety Disorders</option>
+                                        <option>Specific Phobias</option>
+                                        <option>PTSD Symptoms</option>
+                                        <option>Social Anxiety</option>
+                                        <option>General Assessment</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: GAD-7 -->
+                    <div class="step-content" id="step2">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>GAD-7 Anxiety Scale</h3>
+                                <p class="assessment-instructions">Over the last 2 weeks, how often have you been bothered by any of the following problems?</p>
+                                <div id="gad7Questions"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Phobias -->
+                    <div class="step-content" id="step3">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Phobia Assessment</h3>
+                                <p class="assessment-instructions">Rate your fear level for each category (0 = No fear, 5 = Extreme fear)</p>
+                                <div id="phobiaCategories"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: PCL-5 -->
+                    <div class="step-content" id="step4">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>PCL-5 PTSD Assessment</h3>
+                                <p class="assessment-instructions">In the past month, how much were you bothered by:</p>
+                                <div id="pcl5Questions"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Biometrics -->
+                    <div class="step-content" id="step5">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Biometric Calibration</h3>
+                                <p class="assessment-instructions">Setting up physiological monitoring for personalized therapy</p>
+                                <div class="biometric-setup">
+                                    <div class="biometric-item">
+                                        <div class="biometric-icon">
+                                            <i class="fas fa-heartbeat"></i>
+                                        </div>
+                                        <div class="biometric-info">
+                                            <div class="biometric-label">Heart Rate</div>
+                                            <div class="biometric-value" id="heartRate">72 bpm</div>
+                                        </div>
+                                        <div class="biometric-status">
+                                            <div class="status status--success">Normal</div>
+                                        </div>
+                                    </div>
+                                    <div class="biometric-item">
+                                        <div class="biometric-icon">
+                                            <i class="fas fa-thermometer-half"></i>
+                                        </div>
+                                        <div class="biometric-info">
+                                            <div class="biometric-label">Blood Pressure</div>
+                                            <div class="biometric-value" id="bloodPressure">120/80</div>
+                                        </div>
+                                        <div class="biometric-status">
+                                            <div class="status status--success">Normal</div>
+                                        </div>
+                                    </div>
+                                    <div class="biometric-item">
+                                        <div class="biometric-icon">
+                                            <i class="fas fa-brain"></i>
+                                        </div>
+                                        <div class="biometric-info">
+                                            <div class="biometric-label">Stress Level</div>
+                                            <div class="biometric-value" id="stressLevel">Low</div>
+                                        </div>
+                                        <div class="biometric-status">
+                                            <div class="status status--info">Monitoring</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assessment Results -->
+                    <div class="step-content" id="results" style="display: none;">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Assessment Results & Recommendations</h3>
+                                <div id="assessmentResults"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wizard-navigation">
+                    <button class="btn btn--outline" id="prevBtn" onclick="previousStep()" disabled>Previous</button>
+                    <button class="btn btn--primary" id="nextBtn" onclick="nextStep()">Next</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VR Environments -->
+    <section id="environments" class="environments">
+        <div class="container">
+            <div class="section-header">
+                <h2>VR Therapy Environments</h2>
+                <p>Immersive experiences designed for targeted exposure therapy</p>
+            </div>
+            <div class="environments-grid">
+                <div class="environment-card" data-environment="height" onclick="openVREnvironment('sky.html')">
+                    <div class="env-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Height Therapy</h3>
+                    <p>Gradual exposure to heights from 2m platforms to 100m+ skyscrapers</p>
+                    <div class="env-levels">
+                        <div class="level-badge">Low Platform Training</div>
+                        <div class="level-badge">Building Balcony Experience</div>
+                        <div class="level-badge">Skyscraper Observatory</div>
+                    </div>
+                
+                </div>
+                <div class="environment-card" data-environment="flying" onclick="openVREnvironment('air.html')">
+                    <div class="env-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h3>Flying Simulation</h3>
+                    <p>Overcome aerophobia through realistic flight experiences</p>
+                    <div class="env-levels">
+                        <div class="level-badge">Airport Familiarization</div>
+                        <div class="level-badge">Takeoff and Landing</div>
+                        <div class="level-badge">Turbulence Training</div>
+                    </div>
+                
+                </div>
+                <div class="environment-card" data-environment="social" onclick="openVREnvironment('public.html')">
+                    <div class="env-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Social Training</h3>
+                    <p>Practice social interactions and public speaking</p>
+                    <div class="env-levels">
+                        <div class="level-badge">Small Group Interaction</div>
+                        <div class="level-badge">Public Speaking Practice</div>
+                        <div class="level-badge">Large Social Events</div>
+                    </div>
+                
+                </div>
+                <div class="environment-card" data-environment="medical" onclick="openVREnvironment('ot.html')">
+                    <div class="env-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Medical Training</h3>
+                    <p>Overcome medical procedure anxiety through controlled exposure</p>
+                    <div class="env-levels">
+                        <div class="level-badge">Consultation Room</div>
+                        <div class="level-badge">Injection Training</div>
+                        <div class="level-badge">Surgery Observation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="dashboard">
+        <div class="container">
+            <div class="section-header">
+                <h2>Therapy Dashboard</h2>
+                <p>Track your progress and treatment metrics</p>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h4>Anxiety Reduction</h4>
+                    <div class="progress-ring" data-progress="75">
+                        <div class="progress-value">75%</div>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Exposure Tolerance</h4>
+                    <div class="progress-ring" data-progress="60">
+                        <div class="progress-value">60%</div>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Session Completion</h4>
+                    <div class="progress-ring" data-progress="85">
+                        <div class="progress-value">85%</div>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Overall Progress</h4>
+                    <div class="progress-ring" data-progress="70">
+                        <div class="progress-value">70%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources -->
+    <section id="resources" class="resources">
+        <div class="container">
+            <div class="section-header">
+                <h2>Professional Resources</h2>
+                <p>Clinical tools and educational materials</p>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <h4>Clinical Guidelines</h4>
+                    <p>Evidence-based protocols for VR exposure therapy</p>
+                    <button class="btn btn--outline">Download</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h4>Professional Training</h4>
+                    <p>Comprehensive training for healthcare professionals</p>
+                    <button class="btn btn--outline">View Course</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h4>Research Studies</h4>
+                    <p>Latest studies and clinical trial results</p>
+                    <button class="btn btn--outline">Read More</button>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h4>Support Center</h4>
+                    <p>24/7 technical and clinical support</p>
+                    <button class="btn btn--outline">Contact</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>VR Therapy Hub</h5>
+                    <p>Professional virtual reality platform for mental health treatment</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Clinical</h5>
+                    <a href="#">Assessment Tools</a>
+                    <a href="#">Treatment Protocols</a>
+                    <a href="#">Research Data</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Support</h5>
+                    <a href="#">Documentation</a>
+                    <a href="#">Training</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Connect</h5>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

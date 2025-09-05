@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Public Speaking Auditorium Simulator</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <style>
+    body { margin: 0; }
+  </style>
+</head>
+<body>
+  <a-scene>
+
+    <!-- Stage (brown panel) -->
+    <a-box position="0 0 -2" depth="6" height="0.5" width="12" color="#8b5a2b"></a-box>
+    <a-cylinder position="0 1 -2" radius="0.1" height="2" color="black"></a-cylinder>
+    <a-sphere position="0 2 -2" radius="0.2" color="gray"></a-sphere>
+
+
+    <!-- Auditorium walls and floor -->
+    <a-box position="0 5 -15" depth="50" height="12" width="50" color="#f5f5f5" material="side: back"></a-box>
+    <a-plane rotation="-90 0 0" width="80" height="80" color="#d2b48c" position="0 0 -2"></a-plane>
+
+    <!-- Camera (speaker POV on stage) -->
+    <a-entity id="player" position="0 1.6 -2" movement-controls="fly: false">
+      <a-camera wasd-controls look-controls></a-camera>
+    </a-entity>
+
+    <!-- Audience container -->
+    <a-entity id="audience"></a-entity>
+
+  </a-scene>
+
+  <script>
+    const audience = document.getElementById('audience');
+    const rows = 6;
+    const cols = 20;
+    const radiusStep = 3;
+    const heightStep = 0.6;
+    const stageX = 0, stageZ = -2;
+
+    for (let r = 0; r < rows; r++) {
+      const radius = 6 + r * radiusStep; 
+      const y = r * heightStep;
+
+      for (let c = 0; c < cols; c++) {
+        const angle = (c / cols) * Math.PI * 1.5 - Math.PI * 0.75;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius - 2;
+
+        const dx = stageX - x;
+        const dz = stageZ - z;
+        const rotY = Math.atan2(dx, dz) * (180 / Math.PI);
+
+        const group = document.createElement('a-entity');
+        group.setAttribute('position', `${x} ${y} ${z}`);
+        group.setAttribute('rotation', `0 ${rotY} 0`);
+
+        const seat = document.createElement('a-box');
+        seat.setAttribute('width', '0.6');
+        seat.setAttribute('height', '0.1');
+        seat.setAttribute('depth', '0.6');
+        seat.setAttribute('color', '#4b3832');
+        seat.setAttribute('position', '0 0.25 0');
+        group.appendChild(seat);
+
+        const back = document.createElement('a-box');
+        back.setAttribute('width', '0.6');
+        back.setAttribute('height', '0.7');
+        back.setAttribute('depth', '0.1');
+        back.setAttribute('color', '#4b3832');
+        back.setAttribute('position', '0 0.65 -0.25');
+        group.appendChild(back);
+
+        const body = document.createElement('a-cylinder');
+        body.setAttribute('radius', '0.2');
+        body.setAttribute('height', '0.8');
+        body.setAttribute('color', '#4682b4');
+        body.setAttribute('position', '0 0.8 0');
+        group.appendChild(body);
+
+        const head = document.createElement('a-sphere');
+        head.setAttribute('radius', '0.25');
+        head.setAttribute('color', '#f1c27d');
+        head.setAttribute('position', '0 1.3 0');
+        group.appendChild(head);
+
+        audience.appendChild(group);
+      }
+    }
+  </script>
+</body>
+</html>
