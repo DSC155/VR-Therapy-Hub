@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Public Speaking Auditorium Simulator</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script>
+    if (!localStorage.getItem('token')) {
+        window.location.href = 'login.html';
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #ui-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(139, 92, 246, 0.1);
+      color: white;
+      padding: 15px 35px;
+      border-radius: 40px;
+      font-family: 'Outfit', sans-serif;
+      pointer-events: none;
+      z-index: 100;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .back-btn {
+      position: absolute; top: 20px; left: 20px; padding: 10px 20px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: white; border-radius: 12px; cursor: pointer; text-decoration: none;
+      font-family: 'Outfit', sans-serif; z-index: 1000; backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+
+<body>
+  <a href="index.html" class="back-btn">← Exit Session</a>
+  <div id="ui-overlay">
+    Exposure Level: <span id="level-label">Level 1 (2 people)</span><br>
+    <small style="opacity: 0.7;">Press keys 1-9 to change audience size</small>
+  </div>
+
+  <a-scene>
+    <a-assets>
+      <img id="face1"
+        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
+        crossorigin="anonymous">
+      <img id="face2"
+        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
+        crossorigin="anonymous">
+      <img id="face3"
+        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
+        crossorigin="anonymous">
+      <img id="face4"
+        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
+        crossorigin="anonymous">
+      <img id="face5"
+        src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
+        crossorigin="anonymous">
+      <img id="face6"
+        src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80"
+        crossorigin="anonymous">
+      <img id="wood"
+        src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1024&q=80"
+        crossorigin="anonymous">
+      <img id="art1"
+        src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+        crossorigin="anonymous">
+      <img id="art2"
+        src="https://images.unsplash.com/photo-1578301978018-3005320c1598?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+        crossorigin="anonymous">
+      <img id="art3"
+        src="https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+        crossorigin="anonymous">
+    </a-assets>
+
+    <!-- Gallery Lighting -->
+    <a-entity light="type: ambient; color: #fff; intensity: 0.6"></a-entity>
+    <a-entity light="type: directional; color: #fff; intensity: 0.3; castShadow: true" position="-1 4 2"></a-entity>
+    <!-- Gallery Spotlights for Art -->
+    <a-entity light="type: spot; color: #fff; intensity: 0.8; angle: 45; penumbra: 0.3" position="-15 5 -10"
+      rotation="-20 -90 0"></a-entity>
+    <a-entity light="type: spot; color: #fff; intensity: 0.8; angle: 45; penumbra: 0.3" position="15 5 -10"
+      rotation="-20 90 0"></a-entity>
+    <a-entity light="type: spot; color: #fff; intensity: 0.8; angle: 45; penumbra: 0.3" position="0 5 -24"
+      rotation="-20 180 0"></a-entity>
+
+    <!-- Stage (Speaker Podium) -->
+    <a-cylinder position="0 0.1 -2" radius="2" height="0.2" color="#222"
+      material="roughness: 0.2; metalness: 0.3"></a-cylinder>
+    <a-cylinder position="0 0.7 -2.5" radius="0.4" height="1.4" color="#111"
+      material="roughness: 0.1; metalness: 0.8"></a-cylinder>
+    <a-box position="0 1.4 -2.5" w="0.9" depth="0.5" height="0.05" color="#111"
+      material="roughness: 0.1; metalness: 0.8" rotation="-15 0 0"></a-box>
+
+    <!-- Gallery Room -->
+    <!-- Floor -->
+    <a-plane rotation="-90 0 0" width="60" height="60" color="#555555" material="roughness: 0.8"
+      position="0 0 -2"></a-plane>
+    <!-- Ceiling -->
+    <a-plane rotation="90 0 0" width="60" height="60" color="#fafafa" position="0 10 -2"></a-plane>
+    <!-- Walls -->
+    <a-plane position="0 5 -25" width="60" height="10" color="#fafafa"></a-plane> <!-- Front Wall -->
+    <a-plane position="0 5 25" rotation="0 180 0" width="60" height="10" color="#fafafa"></a-plane> <!-- Back Wall -->
+    <a-plane position="-25 5 0" rotation="0 90 0" width="60" height="10" color="#fafafa"></a-plane> <!-- Left Wall -->
+    <a-plane position="25 5 0" rotation="0 -90 0" width="60" height="10" color="#fafafa"></a-plane> <!-- Right Wall -->
+
+    <!-- Gallery Artworks -->
+    <a-plane position="-24.9 3 -10" rotation="0 90 0" width="6" height="4" material="src: #art1"></a-plane>
+    <a-box position="-24.95 3 -10" width="6.2" height="4.2" depth="0.1" color="#111"></a-box>
+
+    <a-plane position="24.9 3 -10" rotation="0 -90 0" width="6" height="4" material="src: #art2"></a-plane>
+    <a-box position="24.95 3 -10" width="6.2" height="4.2" depth="0.1" color="#111"></a-box>
+
+    <a-plane position="0 3 -24.9" width="6" height="4" material="src: #art3"></a-plane>
+    <a-box position="0 3 -24.95" width="6.2" height="4.2" depth="0.1" color="#111"></a-box>
+
+    <!-- Camera (speaker POV on stage) -->
+    <a-entity id="player" position="0 1.6 -2" movement-controls="fly: false">
+      <a-camera wasd-controls look-controls></a-camera>
+    </a-entity>
+
+    <!-- Audience container -->
+    <a-entity id="audience"></a-entity>
+
+    <!-- Sounds (Dynamics based on audience size) -->
+    <a-entity id="crowdSound" 
+              sound="src: url(https://actions.google.com/sounds/v1/ambiences/theatre_audience_murmur.ogg); autoplay: false; loop: true; volume: 0.1"></a-entity>
+    <a-entity id="micHum" 
+              sound="src: url(https://actions.google.com/sounds/v1/foley/microphone_feedback.ogg); autoplay: false; loop: true; volume: 0.05"></a-entity>
+
+  </a-scene>
+
+  <script>
+    const audience = document.getElementById('audience');
+    const label = document.getElementById('level-label');
+    const crowdSound = document.getElementById('crowdSound');
+    const micHum = document.getElementById('micHum');
+
+    // Ensure sounds start on first user interaction
+    window.addEventListener('click', () => {
+      const scene = document.querySelector('a-scene');
+      const sounds = scene.querySelectorAll('[sound]');
+      sounds.forEach(s => {
+        if (s.components.sound) s.components.sound.playSound();
+      });
+    }, { once: true });
+    const radiusStep = 3;
+    const heightStep = 0.6;
+    const stageX = 0, stageZ = -2;
+
+    const levels = {
+      '1': { rows: 1, cols: 2, name: 'Level 1 (2 people)' },
+      '2': { rows: 2, cols: 3, name: 'Level 2 (6 people)' },
+      '3': { rows: 2, cols: 6, name: 'Level 3 (12 people)' },
+      '4': { rows: 3, cols: 8, name: 'Level 4 (24 people)' },
+      '5': { rows: 4, cols: 10, name: 'Level 5 (40 people)' },
+      '6': { rows: 5, cols: 14, name: 'Level 6 (70 people)' },
+      '7': { rows: 6, cols: 20, name: 'Level 7 (120 people)' },
+      '8': { rows: 8, cols: 25, name: 'Level 8 (200 people)' },
+      '9': { rows: 10, cols: 30, name: 'Level 9 (300 people)' }
+    };
+
+    function generateAudience(rows, cols) {
+      // Clear existing audience
+      while (audience.firstChild) {
+        audience.removeChild(audience.firstChild);
+      }
+
+      for (let r = 0; r < rows; r++) {
+        // Flat gallery height, people are seated on flat benches
+        const radius = 6 + r * radiusStep;
+        const y = 0;
+
+        for (let c = 0; c < cols; c++) {
+          const angle = cols > 1 ? (c / (cols - 1)) * Math.PI * 1.5 - Math.PI * 0.75 : -Math.PI / 2;
+          const x = Math.cos(angle) * radius;
+          const z = Math.sin(angle) * radius - 2;
+
+          const dx = stageX - x;
+          const dz = stageZ - z;
+          const rotY = Math.atan2(dx, dz) * (180 / Math.PI);
+
+          const group = document.createElement('a-entity');
+          group.setAttribute('position', `${x} ${y} ${z}`);
+          group.setAttribute('rotation', `0 ${rotY} 0`);
+
+          // Faces array matches IDs of images in a-assets
+          const faceIds = ['#face1', '#face2', '#face3', '#face4', '#face5', '#face6'];
+          const faceImg = faceIds[Math.floor(Math.random() * faceIds.length)];
+          const clothingColors = ['#2c3e50', '#34495e', '#7f8c8d', '#bdc3c7', '#95a5a6', '#1abc9c', '#16a085', '#d35400', '#c0392b'];
+          const clothingColor = clothingColors[Math.floor(Math.random() * clothingColors.length)];
+
+          // Gallery Bench Seat
+          const seat = document.createElement('a-box');
+          seat.setAttribute('width', '0.7');
+          seat.setAttribute('height', '0.5');
+          seat.setAttribute('depth', '0.4');
+          seat.setAttribute('color', '#333'); // Sleek gallery bench
+          seat.setAttribute('material', 'roughness: 0.8');
+          seat.setAttribute('position', '0 0.25 0');
+          group.appendChild(seat);
+
+          // Realistic Body: Torso
+          const torso = document.createElement('a-box');
+          torso.setAttribute('width', '0.4');
+          torso.setAttribute('height', '0.5');
+          torso.setAttribute('depth', '0.25');
+          torso.setAttribute('color', clothingColor);
+          torso.setAttribute('position', '0 0.7 0');
+          group.appendChild(torso);
+
+          // Thighs (resting on bench)
+          const thighs = document.createElement('a-box');
+          thighs.setAttribute('width', '0.38');
+          thighs.setAttribute('height', '0.15');
+          thighs.setAttribute('depth', '0.35');
+          thighs.setAttribute('color', clothingColor);
+          thighs.setAttribute('position', '0 0.53 0.15');
+          group.appendChild(thighs);
+
+          // Calves (going down to floor)
+          const calves = document.createElement('a-box');
+          calves.setAttribute('width', '0.38');
+          calves.setAttribute('height', '0.45');
+          calves.setAttribute('depth', '0.15');
+          calves.setAttribute('color', '#111'); // Dark pants/shoes
+          calves.setAttribute('position', '0 0.25 0.35');
+          group.appendChild(calves);
+
+          // Arms
+          const leftArm = document.createElement('a-box');
+          leftArm.setAttribute('width', '0.1');
+          leftArm.setAttribute('height', '0.4');
+          leftArm.setAttribute('depth', '0.1');
+          leftArm.setAttribute('color', clothingColor);
+          leftArm.setAttribute('position', '-0.25 0.65 0.1');
+          leftArm.setAttribute('rotation', '-20 0 0');
+          group.appendChild(leftArm);
+
+          const rightArm = document.createElement('a-box');
+          rightArm.setAttribute('width', '0.1');
+          rightArm.setAttribute('height', '0.4');
+          rightArm.setAttribute('depth', '0.1');
+          rightArm.setAttribute('color', clothingColor);
+          rightArm.setAttribute('position', '0.25 0.65 0.1');
+          rightArm.setAttribute('rotation', '-20 0 0');
+          group.appendChild(rightArm);
+
+          // Head with Face Texture
+          const head = document.createElement('a-sphere');
+          head.setAttribute('radius', '0.18');
+          head.setAttribute('material', `src: ${faceImg}; color: #fff; roughness: 0.6;`);
+          // A-Frame spheres put the center of the texture at +Z. The model faces -Z. 
+          // So rotating 180 makes the face look towards the stage.
+          head.setAttribute('rotation', '0 180 0');
+          head.setAttribute('position', '0 1.1 0.05');
+          group.appendChild(head);
+
+          audience.appendChild(group);
+        }
+      }
+    }
+
+    function setLevel(key) {
+      const levelData = levels[key];
+      if (!levelData) return;
+      generateAudience(levelData.rows, levelData.cols);
+      label.textContent = levelData.name;
+      
+      // Update crowd volume based on level (0.1 for level 1 to 1.0 for level 9)
+      const levelNum = parseInt(key);
+      const volume = 0.05 + (levelNum / 9) * 0.95;
+      if (crowdSound.components.sound) {
+        crowdSound.setAttribute('sound', 'volume', volume);
+      }
+    }
+
+    // Initialize level 1
+    setLevel('1');
+
+    // Listen for keyboard input 1-9
+    document.addEventListener('keydown', (e) => {
+      const key = e.key;
+      if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(key)) {
+        setLevel(key);
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Skyscraper VR Exposure</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script>
+    if (!localStorage.getItem('token')) {
+        window.location.href = 'login.html';
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #ui-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(139, 92, 246, 0.1);
+      color: white;
+      padding: 15px 35px;
+      border-radius: 40px;
+      font-family: 'Outfit', sans-serif;
+      pointer-events: none;
+      z-index: 100;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .back-btn {
+      position: absolute; top: 20px; left: 20px; padding: 10px 20px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: white; border-radius: 12px; cursor: pointer; text-decoration: none;
+      font-family: 'Outfit', sans-serif; z-index: 1000; backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+
+<body>
+  <a href="index.html" class="back-btn">← Exit Session</a>
+  <div id="ui-overlay">
+    Exposure Level: <span id="height-label">Level 1 (2m)</span><br>
+    <small style="opacity: 0.7;">Press keys 1-9 to change height</small>
+  </div>
+
+  <a-scene>
+    <!-- 360° City Panorama Background -->
+    <a-sky id="sky" src="https://images.pexels.com/photos/3787839/pexels-photo-3787839.jpeg" rotation="0 -90 0"></a-sky>
+
+    <!-- Lights -->
+    <a-entity light="type: ambient; intensity: 0.6"></a-entity>
+    <a-entity light="type: directional; intensity: 0.8" position="1 4 3"></a-entity>
+
+    <!-- Ground Plane to give a sense of height from the bottom -->
+    <a-plane position="0 0 0" rotation="-90 0 0" width="400" height="400" color="#111"
+      material="roughness: 1; metalness: 0"></a-plane>
+
+    <!-- Skyscraper Tower Structure -->
+    <a-entity id="main-building" position="0 1 0">
+      <!-- Base building is 2m tall initially -->
+      <a-box depth="20" height="2" width="20" color="#555"></a-box>
+    </a-entity>
+
+    <!-- Camera Rig that moves up/down -->
+    <a-entity id="rig" position="0 2 0">
+      <a-camera look-controls wasd-controls position="0 1.6 0"></a-camera>
+
+      <!-- Player Platform -->
+      <a-entity id="platform" position="0 0 0">
+        <!-- Reflective Glass Floor -->
+        <a-entity geometry="primitive: box; depth: 20; height: 0.2; width: 20" position="0 0 0"
+          material="color: #FFFFFF; metalness: 0.9; roughness: 0.05; opacity: 0.15; transparent: true; sphericalEnvMap: #sky;">
+        </a-entity>
+
+        <!-- Railings -->
+        <a-box position="10 0 0" depth="0.5" height="2" width="20" color="gray"></a-box>
+        <a-box position="-10 0 0" depth="0.5" height="2" width="20" color="gray"></a-box>
+        <a-box position="0 0 10" depth="20" height="2" width="0.5" color="gray"></a-box>
+        <a-box position="0 0 -10" depth="20" height="2" width="0.5" color="gray"></a-box>
+      </a-entity>
+    </a-entity>
+
+    <!-- Surrounding City Buildings -->
+    <a-entity id="city-filler"></a-entity>
+
+    <!-- Wind Sound (Dynamics based on height) -->
+    <a-entity id="windSound" 
+              sound="src: url(https://actions.google.com/sounds/v1/ambiences/heavy_wind_and_rain.ogg); autoplay: false; loop: true; volume: 0.1"></a-entity>
+
+  </a-scene>
+
+  <script>
+    const rig = document.querySelector('#rig');
+    const label = document.querySelector('#height-label');
+    const windSound = document.querySelector('#windSound');
+
+    // Ensure sounds start on first user interaction
+    window.addEventListener('click', () => {
+      const scene = document.querySelector('a-scene');
+      const sounds = scene.querySelectorAll('[sound]');
+      sounds.forEach(s => {
+        if (s.components.sound) s.components.sound.playSound();
+      });
+    }, { once: true });
+
+    // Generate Procedural City Buildings around the main building
+    const cityContainer = document.querySelector('#city-filler');
+    for (let i = 0; i < 60; i++) {
+        // ... (existing building code)
+      const building = document.createElement('a-box');
+      // Create buildings of varying heights
+      const height = 20 + Math.random() * 150;
+      // Spread them around
+      const x = (Math.random() - 0.5) * 350;
+      const z = (Math.random() - 0.5) * 350;
+
+      // Don't place buildings too close to the player's main tower
+      if (Math.abs(x) < 30 && Math.abs(z) < 30) continue;
+
+      building.setAttribute('position', `${x} ${height / 2} ${z}`);
+      building.setAttribute('width', 10 + Math.random() * 15);
+      building.setAttribute('depth', 10 + Math.random() * 15);
+      building.setAttribute('height', height);
+      // Give them a slight color variance
+      building.setAttribute('color', i % 3 === 0 ? '#34495e' : (i % 3 === 1 ? '#2c3e50' : '#243342'));
+      building.setAttribute('material', 'roughness: 0.8; metalness: 0.2');
+      cityContainer.appendChild(building);
+    }
+
+    // Define 9 levels of height (in meters)
+    const levels = {
+      '1': { height: 2, name: 'Level 1 (2m)' },
+      '2': { height: 10, name: 'Level 2 (10m)' },
+      '3': { height: 25, name: 'Level 3 (25m)' },
+      '4': { height: 50, name: 'Level 4 (50m)' },
+      '5': { height: 80, name: 'Level 5 (80m)' },
+      '6': { height: 120, name: 'Level 6 (120m)' },
+      '7': { height: 170, name: 'Level 7 (170m)' },
+      '8': { height: 230, name: 'Level 8 (230m)' },
+      '9': { height: 300, name: 'Level 9 (300m)' }
+    };
+
+    function setLevel(key) {
+      const levelData = levels[key];
+      if (!levelData) return;
+
+      const newHeight = levelData.height;
+
+      // Ensure platform does not pass the actual building height visual
+      const building = document.querySelector('#main-building');
+
+      // Animate the building to stretch from the ground up to the new height
+      // The base box is 2m tall, so we scale it by (newHeight / 2)
+      // The box centers at newHeight / 2
+      const targetScaleY = Math.max(newHeight / 2, 0.01);
+      const targetPosY = newHeight / 2;
+
+      building.setAttribute('animation__scale', {
+        property: 'scale',
+        to: `1 ${targetScaleY} 1`,
+        dur: 2000,
+        easing: 'easeInOutQuad'
+      });
+      building.setAttribute('animation__pos', {
+        property: 'position',
+        to: `0 ${targetPosY} 0`,
+        dur: 2000,
+        easing: 'easeInOutQuad'
+      });
+
+      rig.setAttribute('animation', {
+        property: 'position',
+        to: `0 ${newHeight} 0`,
+        dur: 2000,
+        easing: 'easeInOutQuad'
+      });
+
+      label.textContent = levelData.name;
+      
+      // Update wind volume based on height (0.1 for 2m to 1.0 for 300m)
+      const volume = 0.1 + (newHeight / 300) * 0.9;
+      if (windSound.components.sound) {
+        windSound.setAttribute('sound', 'volume', volume);
+      }
+    }
+
+    // Listen for keyboard input 1-9
+    document.addEventListener('keydown', (e) => {
+      const key = e.key;
+      if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(key)) {
+        setLevel(key);
+      }
+    });
+  </script>
+</body>
+
+</html>

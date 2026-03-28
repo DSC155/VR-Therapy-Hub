@@ -1,0 +1,14 @@
+{
+  "name": "vr-therapy-hub",
+  "version": "1.0.0",
+  "description": "Full-stack VR Therapy Hub",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "backend": "cd backend && npm start",
+    "frontend": "npx serve frontend"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

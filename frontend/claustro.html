@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Claustrophobia Therapy - Elevator</title>
+    <!-- Add A-Frame CDN -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <style>
+        body { margin: 0; overflow: hidden; background: #000; }
+        
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Let touches pass through to VR */
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .top-bar {
+            pointer-events: auto; /* Re-enable clicks for buttons */
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .back-btn {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(15, 23, 42, 0.9);
+            color: #06B6D4;
+        }
+
+        .overlay-center {
+            pointer-events: auto;
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .overlay-title {
+            color: #fff;
+            margin: 0 0 15px 0;
+            font-size: 1.5rem;
+        }
+
+        .btn-start {
+            background: #06B6D4;
+            color: #0F172A;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-start:hover {
+            background: #67E8F9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div id="ui-overlay">
+        <div class="top-bar">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Exit Simulator
+            </a>
+        </div>
+        <div class="overlay-center">
+            <h2 class="overlay-title">Claustrophobia Therapy</h2>
+            <button class="btn-start" onclick="handleStart()">Start Session</button>
+        </div>
+    </div>
+
+    <a-scene background="color: #000" renderer="colorManagement: true;">
+        <!-- Camera Rig -->
+        <a-entity id="rig" position="0 1.6 0">
+            <a-camera look-controls wasd-controls="enabled: false">
+            </a-camera>
+        </a-entity>
+
+        <!-- Elevator walls (Thickened to prevent seeing outside) -->
+        <a-box position="0 1.5 -2" depth="1" height="5" width="5" color="#555" material="roughness: 0.8"></a-box> 
+        <a-box position="-2 1.5 0" depth="5" height="5" width="1" color="#666" material="roughness: 0.8"></a-box> 
+        <a-box position="2 1.5 0" depth="5" height="5" width="1" color="#666" material="roughness: 0.8"></a-box>
+        
+        <!-- Back wall -->
+        <a-box position="0 1.5 2" depth="1" height="5" width="5" color="#444" material="roughness: 0.8"></a-box>
+        
+        <!-- Ceiling & floor (Thickened to prevent gaps) -->
+        <a-box position="0 -0.5 0" depth="5" width="5" height="1" color="#222"></a-box> 
+        <!-- The Top Ceiling Panel -> Made light gray and Flat so it acts like a bright light cover and is never black -->
+        <a-box position="0 3.5 0" depth="5" width="5" height="1" color="#dddddd" material="shader: flat"></a-box>
+
+        <!-- Lights -->
+        <a-light type="ambient" color="#444"></a-light>
+        <a-light type="point" intensity="0.6" position="0 2.5 0"
+                 animation__flicker="property: light.intensity; from: 0.5; to: 0.8; dir: alternate; dur: 180; loop: true"></a-light>
+    </a-scene>
+
+    <script src="app.js"></script>
+    <script>
+        function handleStart() {
+            if(window.startClaustro) {
+                window.startClaustro();
+            } else {
+                alert("Entering Elevator Simulation...");
+            }
+            
+            // Camera is already inside, just start the shake
+            const rig = document.querySelector('#rig');
+            rig.setAttribute('animation__shake', 'property: position; from: 0 1.6 0; to: 0.01 1.61 0.01; dir: alternate; dur: 50; loop: true');
+        }
+    </script>
+</body>
+</html>
