@@ -11,15 +11,4 @@
 - 🎨 **Custom Scenes** – Different environments such as air, sky, and outdoor therapy sessions (`air.html`, `sky.html`, `ot.html`).  
 - 🧠 **Mental Wellness Support** – Focused on improving emotional and psychological well-being through virtual immersion.  
 
----
 
-## 📁 Project Structure
-
-Here’s a breakdown of each file and its purpose:
-1. **`air.html`** – Calming air-based environment  
-2. **`app.js`** – Core logic and interactions for the VR experience  
-3. **`index.html`** – Main entry page for the application  
-4. **`ot.html`** – Operation theater environment (for therapy simulations)  
-5. **`public.html`** – Public speaking VR session  
-6. **`sky.html`** – Sky and relaxation scene  
-7. **`style.css`** – Styling for all pages and VR scenes
